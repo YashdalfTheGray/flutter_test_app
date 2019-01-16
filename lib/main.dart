@@ -9,6 +9,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Startup Name Generator',
       home: RandomWords(),
+      theme: new ThemeData(
+          primaryColor: Colors.white, accentColor: Colors.deepOrange),
     );
   }
 }
@@ -18,7 +20,7 @@ class RandomWordsState extends State<RandomWords> {
   final _saved = Set<WordPair>();
   final _biggerFont = TextStyle(fontSize: 18.0);
 
-  Widget _buildRow(WordPair pair) {
+  Widget _buildRow(WordPair pair, BuildContext context) {
     final alreadySaved = _saved.contains(pair);
     return ListTile(
       title: Text(
@@ -27,7 +29,7 @@ class RandomWordsState extends State<RandomWords> {
       ),
       trailing: Icon(
         alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
+        color: alreadySaved ? Theme.of(context).accentColor : null,
       ),
       onTap: () {
         setState(() {
@@ -41,7 +43,7 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
-  Widget _buildSuggestions() {
+  Widget _buildSuggestions(BuildContext context) {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
@@ -51,7 +53,7 @@ class RandomWordsState extends State<RandomWords> {
           if (index >= _suggestions.length) {
             _suggestions.addAll(generateWordPairs().take(10));
           }
-          return _buildRow(_suggestions[index]);
+          return _buildRow(_suggestions[index], context);
         });
   }
 
@@ -89,7 +91,7 @@ class RandomWordsState extends State<RandomWords> {
           )
         ],
       ),
-      body: _buildSuggestions(),
+      body: _buildSuggestions(context),
     );
   }
 }
