@@ -4,7 +4,7 @@ import 'package:flutter_test_app/screens/saved_list/index.dart';
 
 class RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
-  final _saved = Set<WordPair>();
+  final _saved = Set<String>();
   final _biggerFont = TextStyle(fontSize: 18.0);
 
   Widget _buildRow(WordPair pair, BuildContext context) {
@@ -21,9 +21,9 @@ class RandomWordsState extends State<RandomWords> {
       onTap: () {
         setState(() {
           if (alreadySaved) {
-            _saved.remove(pair);
+            _saved.remove(pair.asPascalCase);
           } else {
-            _saved.add(pair);
+            _saved.add(pair.asPascalCase);
           }
         });
       },
