@@ -9,7 +9,7 @@ class FileStore {
     return directory.path;
   }
 
-  static Future<File> writeCounter(Set<String> saved) async {
+  static Future<File> writeSuggestions(Set<String> saved) async {
     final path = await _localPath;
     final file = File('$path/saved_suggestions.json');
 
@@ -17,7 +17,7 @@ class FileStore {
     return file.writeAsString(jsonEncode(saved.toList()));
   }
 
-  static Future<Set<String>> readCounter() async {
+  static Future<Set<String>> readSuggestions() async {
     try {
       final path = await _localPath;
       final file = File('$path/saved_suggestions.json');
