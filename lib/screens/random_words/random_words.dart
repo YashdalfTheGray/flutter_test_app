@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter_test_app/screens/saved_list/index.dart';
+import 'package:flutter_test_app/util/file_store.dart';
 
 class RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
-  final _saved = Set<String>();
   final _biggerFont = TextStyle(fontSize: 18.0);
+
+  var _saved = Set<String>();
 
   Widget _buildRow(WordPair pair, BuildContext context) {
     final alreadySaved = _saved.contains(pair);
@@ -18,7 +20,7 @@ class RandomWordsState extends State<RandomWords> {
         alreadySaved ? Icons.favorite : Icons.favorite_border,
         color: alreadySaved ? Theme.of(context).accentColor : null,
       ),
-      onTap: () {
+      onTap: () async {
         setState(() {
           if (alreadySaved) {
             _saved.remove(pair.asPascalCase);
@@ -26,6 +28,8 @@ class RandomWordsState extends State<RandomWords> {
             _saved.add(pair.asPascalCase);
           }
         });
+
+        FileStore.writeSuggestions(_saved);
       },
     );
   }
@@ -47,6 +51,13 @@ class RandomWordsState extends State<RandomWords> {
   void _pushSaved() {
     Navigator.of(context).push(new MaterialPageRoute(
         builder: (BuildContext context) => new SavedList(_saved)));
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+
+    _saved = await FileStore.readSuggestions();
   }
 
   @override
