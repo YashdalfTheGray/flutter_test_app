@@ -10,7 +10,7 @@ class RandomWordsState extends State<RandomWords> {
   var _saved = Set<String>();
 
   Widget _buildRow(WordPair pair, BuildContext context) {
-    final alreadySaved = _saved.contains(pair);
+    final alreadySaved = _saved.contains(pair.asPascalCase);
     return ListTile(
       title: Text(
         pair.asPascalCase,
@@ -29,7 +29,7 @@ class RandomWordsState extends State<RandomWords> {
           }
         });
 
-        FileStore.writeSuggestions(_saved);
+        await FileStore.writeSuggestions(_saved);
       },
     );
   }
@@ -53,11 +53,18 @@ class RandomWordsState extends State<RandomWords> {
         builder: (BuildContext context) => new SavedList(_saved)));
   }
 
-  @override
-  void initState() async {
-    super.initState();
+  void _readSavedFromFile() async {
+    var saved = await FileStore.readSuggestions();
+    print(saved.toList());
+    setState(() {
+      _saved = saved;
+    });
+  }
 
-    _saved = await FileStore.readSuggestions();
+  @override
+  void initState() {
+    super.initState();
+    _readSavedFromFile();
   }
 
   @override
