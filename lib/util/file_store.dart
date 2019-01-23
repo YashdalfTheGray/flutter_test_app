@@ -35,4 +35,17 @@ class FileStore {
       return new Set<String>();
     }
   }
+
+  static Future<bool> clearSuggestions() async {
+    final path = await _localPath;
+    final file = File('$path/saved_suggestions.json');
+
+    try {
+      await file.delete();
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }
