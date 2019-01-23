@@ -9,11 +9,18 @@ class FileStore {
     return directory.path;
   }
 
-  static Future<File> writeSuggestions(Set<String> saved) async {
+  static Future<bool> writeSuggestions(Set<String> saved) async {
     final path = await _localPath;
     final file = File('$path/saved_suggestions.json');
 
-    return file.writeAsString(jsonEncode(saved.toList()));
+    try {
+      await file.writeAsString(jsonEncode(saved.toList()),
+          mode: FileMode.writeOnly);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   static Future<Set<String>> readSuggestions() async {
