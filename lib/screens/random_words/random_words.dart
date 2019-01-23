@@ -28,8 +28,6 @@ class RandomWordsState extends State<RandomWords> {
             _saved.add(pair.asPascalCase);
           }
         });
-
-        await FileStore.writeSuggestions(_saved);
       },
     );
   }
@@ -55,16 +53,29 @@ class RandomWordsState extends State<RandomWords> {
 
   void _readSavedFromFile() async {
     var saved = await FileStore.readSuggestions();
+    print('read the suggestions below from file');
     print(saved.toList());
     setState(() {
       _saved = saved;
     });
   }
 
+  void _writeSavedToFile() async {
+    await FileStore.writeSuggestions(_saved);
+    print('wrote the suggestions below to file');
+    print((await FileStore.readSuggestions()).toList());
+  }
+
   @override
   void initState() {
     super.initState();
     _readSavedFromFile();
+  }
+
+  @override
+  void dispose() {
+    _writeSavedToFile();
+    super.dispose();
   }
 
   @override
