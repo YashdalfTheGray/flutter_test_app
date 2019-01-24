@@ -8,9 +8,18 @@ class SavedList extends StatelessWidget {
 
   SavedList(saved) : _saved = saved;
 
-  void _clearSuggestions() {
-    FileStore.clearSuggestions();
-  }
+  Function _clearSuggestions(BuildContext context) => () async {
+        final result = await FileStore.clearSuggestions();
+        final message = result
+            ? 'Saved suggestions cleared'
+            : 'There was an error clearing the saved suggestions';
+
+        final snackbar = new SnackBar(
+          content: Text(message),
+        );
+
+        Scaffold.of(context).showSnackBar(snackbar);
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +36,7 @@ class SavedList extends StatelessWidget {
         actions: <Widget>[
           new IconButton(
             icon: const Icon(Icons.delete_forever),
-            onPressed: _clearSuggestions,
+            onPressed: _clearSuggestions(context),
           )
         ],
       ),
