@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_test_app/util/file_store.dart';
 
 class SavedList extends StatelessWidget {
   final _biggerFont = TextStyle(fontSize: 18.0);
@@ -6,6 +7,10 @@ class SavedList extends StatelessWidget {
   final Set<String> _saved;
 
   SavedList(saved) : _saved = saved;
+
+  void _clearSuggestions() {
+    FileStore.clearSuggestions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,12 @@ class SavedList extends StatelessWidget {
     return new Scaffold(
       appBar: new AppBar(
         title: const Text('Saved Suggestions'),
+        actions: <Widget>[
+          new IconButton(
+            icon: const Icon(Icons.delete_forever),
+            onPressed: _clearSuggestions,
+          )
+        ],
       ),
       body: new ListView(
         children: divided,
