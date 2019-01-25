@@ -2,11 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test_app/util/file_store.dart';
 
 class SavedListDeleteAction extends StatelessWidget {
+  final Set<String> _saved;
+
+  SavedListDeleteAction(saved) : _saved = saved;
+
+  void _showSnackbarWith(String message, BuildContext context) {
+    final snackbar = new SnackBar(
+      content: Text(message),
+    );
+    Scaffold.of(context).showSnackBar(snackbar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new IconButton(
       icon: const Icon(Icons.delete_forever),
       onPressed: () async {
+        if (_saved.length == 0) {
+          _showSnackbarWith('Nothing to delete', context);
+          return;
+        }
+
         final result = await FileStore.clearSuggestions();
         final message = result
             ? 'Saved suggestions cleared'
@@ -40,7 +56,7 @@ class SavedList extends StatelessWidget {
     return new Scaffold(
       appBar: new AppBar(
         title: const Text('Saved Suggestions'),
-        actions: <Widget>[new SavedListDeleteAction()],
+        actions: <Widget>[new SavedListDeleteAction(_saved)],
       ),
       body: new ListView(
         children: divided,
