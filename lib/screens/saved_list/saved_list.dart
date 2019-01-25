@@ -8,19 +8,6 @@ class SavedList extends StatelessWidget {
 
   SavedList(saved) : _saved = saved;
 
-  Function _clearSuggestions(BuildContext context) => () async {
-        final result = await FileStore.clearSuggestions();
-        final message = result
-            ? 'Saved suggestions cleared'
-            : 'There was an error clearing the saved suggestions';
-
-        final snackbar = new SnackBar(
-          content: Text(message),
-        );
-
-        Scaffold.of(context).showSnackBar(snackbar);
-      };
-
   @override
   Widget build(BuildContext context) {
     final tiles = _saved.map((String pair) {
@@ -36,7 +23,17 @@ class SavedList extends StatelessWidget {
         actions: <Widget>[
           new IconButton(
             icon: const Icon(Icons.delete_forever),
-            onPressed: _clearSuggestions(context),
+            onPressed: () async {
+              final result = await FileStore.clearSuggestions();
+              final message = result
+                  ? 'Saved suggestions cleared'
+                  : 'There was an error clearing the saved suggestions';
+              final snackbar = new SnackBar(
+                content: Text(message),
+              );
+
+              Scaffold.of(context).showSnackBar(snackbar);
+            },
           )
         ],
       ),
