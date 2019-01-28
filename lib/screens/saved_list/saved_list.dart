@@ -14,6 +14,24 @@ class SavedListDeleteAction extends StatelessWidget {
     Scaffold.of(context).showSnackBar(snackbar);
   }
 
+  void _handleCancel(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  void _handleDelete(BuildContext context) async {
+    Navigator.of(context).pop();
+
+    final result = await FileStore.clearSuggestions();
+    final message = result
+        ? 'Saved suggestions cleared'
+        : 'There was an error clearing the saved suggestions';
+    final snackbar = new SnackBar(
+      content: Text(message),
+    );
+
+    Scaffold.of(context).showSnackBar(snackbar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new IconButton(
@@ -26,17 +44,8 @@ class SavedListDeleteAction extends StatelessWidget {
 
         showDialog(
             context: context,
-            builder: (BuildContext context) => new DeleteAlert());
-
-        // final result = await FileStore.clearSuggestions();
-        // final message = result
-        //     ? 'Saved suggestions cleared'
-        //     : 'There was an error clearing the saved suggestions';
-        // final snackbar = new SnackBar(
-        //   content: Text(message),
-        // );
-
-        // Scaffold.of(context).showSnackBar(snackbar);
+            builder: (BuildContext context) =>
+                new DeleteAlert(_handleCancel, _handleDelete));
       },
     );
   }
