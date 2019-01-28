@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DeleteAlert extends StatelessWidget {
+  final Function _onCancel;
+  final Function _onDelete;
+
+  DeleteAlert(Function onCancel, Function onDelete)
+      : _onCancel = onCancel,
+        _onDelete = onDelete;
+
   @override
   Widget build(BuildContext context) {
     return new AlertDialog(
@@ -10,16 +17,11 @@ class DeleteAlert extends StatelessWidget {
       actions: <Widget>[
         new FlatButton(
           child: new Text('Cancel'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: _onCancel,
         ),
         new FlatButton(
           child: new Text('Delete'),
-          textColor: Theme.of(context).primaryColor,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: _onDelete,
         )
       ],
     );
