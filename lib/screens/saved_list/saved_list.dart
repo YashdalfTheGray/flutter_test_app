@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_test_app/screens/saved_list/components/delete_alert.dart';
 import 'package:flutter_test_app/util/file_store.dart';
 
 class SavedListDeleteAction extends StatelessWidget {
@@ -23,15 +24,19 @@ class SavedListDeleteAction extends StatelessWidget {
           return;
         }
 
-        final result = await FileStore.clearSuggestions();
-        final message = result
-            ? 'Saved suggestions cleared'
-            : 'There was an error clearing the saved suggestions';
-        final snackbar = new SnackBar(
-          content: Text(message),
-        );
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => new DeleteAlert());
 
-        Scaffold.of(context).showSnackBar(snackbar);
+        // final result = await FileStore.clearSuggestions();
+        // final message = result
+        //     ? 'Saved suggestions cleared'
+        //     : 'There was an error clearing the saved suggestions';
+        // final snackbar = new SnackBar(
+        //   content: Text(message),
+        // );
+
+        // Scaffold.of(context).showSnackBar(snackbar);
       },
     );
   }
